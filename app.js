@@ -11,6 +11,7 @@ var socket = require('./routes/socket.js');
 app.use(cookieParser());
 
 app.use('/', routes);
+io.sockets.on('connection', socket);
 
 // development error handler
 // will print stacktrace
