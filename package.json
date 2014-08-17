@@ -1,7 +1,7 @@
 {
   "name": "angular-socket-io-im",
   "version": "0.0.1",
-  "main": "app.js"
+  "main": "app.js",
   "dependencies": {
     "express": "2.5.10",
     "jade": ">= 0.26.1",
