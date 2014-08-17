@@ -1,4 +1,4 @@
-
+Error.stackTraceLimit = Infinity;
 /**
  * Module dependencies.
  */
