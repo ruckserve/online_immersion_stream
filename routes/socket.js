@@ -2,8 +2,6 @@ require('polyfill-promise');
 
 module.exports = function (db, pubsub) {
 
-var chatroomListener = new db.chatroomListener();
-
 var validateUserName = (function (apiKey) {
   // db.getUserByKey(apiKey)
   // get username from database using api_key
