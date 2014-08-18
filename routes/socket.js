@@ -6,7 +6,7 @@ var validateUserName = (function (apiKey) {
   // get username from database using api_key
 })();
 
-var getFriendName = new Promise(resolve, reject) {
+var getFriendName = new Promise(function (resolve, reject) {
   friend = pg.getUser('chatroom_users', {'chatroom_id': chatroom_id});
   if (friend) {
     // get friend username from database when available
@@ -16,7 +16,7 @@ var getFriendName = new Promise(resolve, reject) {
       resolve(friend);  
     });
   }
-};
+});
 
 module.exports = function (socket) {
   // Initiate socket
