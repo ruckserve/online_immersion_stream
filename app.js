@@ -31,7 +31,7 @@ app.configure('development', function(){
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.use(express.errorHandler());
 });
 
 // Routes
@@ -49,5 +49,5 @@ io.sockets.on('connection', socket);
 // Start server
 
 app.listen(process.env.PORT, function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+  console.log("Express server listening on %s:%d in %s mode", app.address().address, app.address().port, app.settings.env);
 });
