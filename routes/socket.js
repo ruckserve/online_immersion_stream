@@ -1,18 +1,35 @@
-var pubsub = require('../lib/pubsub')
-var pg = require('../lib/pg')
+var pubsub = require('../lib/pubsub');
+var db = require('../lib/db');
+require('polyfill-promise');
 
 var validateUserName = (function (apiKey) {
-  // pg.getUserByKey(apiKey)
+  // db.getUserByKey(apiKey)
   // get username from database using api_key
 })();
 
+var getUser = function () {
+  var user = db.getUser(global.userId);
+  return user.done(function (user) {
+    return user.first_name;
+  }, function (err) {
+    throw err;
+  });
+};
+
 var getFriendName = new Promise(function (resolve, reject) {
-  friend = pg.getUser('chatroom_users', {'chatroom_id': chatroom_id});
+  var users = db.getChatroomUsers(global.chatroomId);
+  var friend = users.done(function (usersArray) {
+    var index = usersArray.indexOf(global.userId);
+    return array.splice(index,1);
+  }, function (err) {
+    throw err;
+  });
+
   if (friend) {
     // get friend username from database when available
     resolve(friend);
   } else {
-    pubsub.on('newUserForChatroom_' + chatroom_id, function(friend) {
+    pubsub.on('newUserForChatroom_' + global.chatroomId, function(friend) {
       resolve(friend);  
     });
   }
@@ -24,7 +41,7 @@ module.exports = function (socket) {
 
   var friend = getFriendName() 
   // Friend promise
-  friend.then(
+  friend.done(
     function (friendName) {
       socket.emit('friend:join', {
         friend: friendName
@@ -37,8 +54,8 @@ module.exports = function (socket) {
     }
   );
       
-  messages = pg.getAllMessages(chatroomId);
-  messages.then(
+  messages = db.getAllMessages(global.chatroomId);
+  messages.done(
     function (messages) {
       socket.emit('init', {
         messages: messages
@@ -51,12 +68,8 @@ module.exports = function (socket) {
     }
   );
       
-  message = user + ' has joined the chat'; 
-  pg.saveMessage(chatroomId, 0, message);
-
   socket.broadcast.emit('user:join', {
-    name: 'chatroom',
-    message: message
+    name: first_name
   });
 
   // Events
@@ -67,13 +80,13 @@ module.exports = function (socket) {
       user: name,
       text: data.message
     });
-    pg.saveMessage(chatroomId, userId, message);
+    db.saveMessage(global.chatroomId, global.userId, message);
   });
 
   socket.on('disconnect', function() {
     socket.broadcast.emit('user:left', {
       name: name
     });
-    pg.killChatroom();
+    db.killChatroom();
   });
 };

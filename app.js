@@ -10,9 +10,12 @@ var server = http.createServer(app);
 
 var socket = require('./routes/socket.js');
 
-io.of('/chatrooms/:chatroomId/').use(function(socket, next) {
+// io.of('/chatrooms/:chatroomId/').use(function(socket, next) {
+io.use(function(socket, next) {
   var handshakeData = socket.request;
   console.log(handshakeData);
+  global.chatroomId = handshakeData.chatroomId;
+  global.userId = handshakeData.userId;
   // authenticate against apiKey
   // if (error) stop and stuff;
   next();
@@ -43,5 +46,5 @@ app.use(function(err, req, res, next) {
 });
 
 server.listen(process.env.PORT, '11.11.11.12', function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+  console.log("Express server listening on %s:%d in %s mode", server.address().address, server.address().port, app.settings.env);
 });
