@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
-var pubSub = new require('events').EventEmitter();
+var events = require('events');
+var pubSub = new events.EventEmitter();
 var db = require('./lib/db')(pubSub);
 // var cookieParser = require('cookie-parser');
 
@@ -10,7 +11,6 @@ var io = require('socket.io')({
 
 var app = module.exports = express();
 var server = http.createServer(app);
-
 var socket = require('./routes/socket.js')(db, pubSub);
 
 // io.of('/chatrooms/:chatroomId/').use(function(socket, next) {
