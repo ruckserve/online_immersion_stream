@@ -1,6 +1,8 @@
-var pubsub = require('../lib/pubsub');
-var db = require('../lib/db');
 require('polyfill-promise');
+
+module.exports = function (db, pubsub) {
+
+var chatroomListener = new db.chatroomListener();
 
 var validateUserName = (function (apiKey) {
   // db.getUserByKey(apiKey)
@@ -35,7 +37,7 @@ var getFriendName = new Promise(function (resolve, reject) {
   }
 });
 
-module.exports = function (socket) {
+return function (socket) {
   // Initiate socket
   var message, messages;
 
@@ -89,4 +91,6 @@ module.exports = function (socket) {
     });
     db.killChatroom();
   });
+};
+
 };
