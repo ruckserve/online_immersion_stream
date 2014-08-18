@@ -1,16 +1,23 @@
 var express = require('express');
-var cookieParser = require('cookie-parser');
-var IO = require('socket.io');
+var http = require('http');
+// var cookieParser = require('cookie-parser');
+var io = require('socket.io')({
+  // socket.io options
+});
 
-var app = module.exports = express.createServer();
-var io = IO.listen(app);
+var app = module.exports = express();
+var server = http.createServer(app);
 
-var routes = require('./routes/index');
 var socket = require('./routes/socket.js');
 
-app.use(cookieParser());
+io.of('/chatrooms/:chatroomId/').use(function(socket, next) {
+  var handshakeData = socket.request;
+  console.log(handshakeData);
+  // authenticate against apiKey
+  // if (error) stop and stuff;
+  next();
+});
 
-app.use('/', routes);
 io.sockets.on('connection', socket);
 
 // development error handler
@@ -33,4 +40,8 @@ app.use(function(err, req, res, next) {
         message: err.message,
         error: {}
     });
+});
+
+server.listen(process.env.PORT, 11.11.11.12, function(){
+  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
