@@ -42,6 +42,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
-server.listen(process.env.PORT, 11.11.11.12, function(){
+server.listen(process.env.PORT, '11.11.11.12', function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
