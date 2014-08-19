@@ -27,7 +27,7 @@ var getFriendName = new Promise(function (resolve, reject) {
 
   if (friend) {
     // get friend username from database when available
-    resolve(friend);
+    resolve(getUser(friend));
   } else {
     pubsub.on('newUserForChatroom_' + global.chatroomId, function(friend) {
       resolve(friend);  
@@ -87,7 +87,8 @@ return function (socket) {
     socket.broadcast.emit('user:left', {
       name: name
     });
-    db.killChatroom();
+    
+    db.killChatroom(global.chatroomId);
   });
 };
 
