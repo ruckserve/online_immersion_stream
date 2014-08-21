@@ -43,8 +43,10 @@ app.get('/partials/:name', routes.partials);
 app.get('*', routes.index);
 
 // Socket.io Communication
-
-io.sockets.on('connection', socket);
+var chatrooms = {};
+io.sockets.on('connection', function(io) {
+  socket(io, chatrooms);
+});
 
 // Start server
 
